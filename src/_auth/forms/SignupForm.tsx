@@ -1,10 +1,11 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Form,
   FormControl,
-  FormDescription,
+  // FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,8 +16,10 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { SignupValidationSchema } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
+import { creatUserAccount } from "@/lib/appwrite/api";
 
 const SignupForm = () => {
+  const { toast } = useToast();
   const isloading = false;
   const form = useForm<z.infer<typeof SignupValidationSchema>>({
     resolver: zodResolver(SignupValidationSchema),
@@ -34,7 +37,11 @@ const SignupForm = () => {
     // ✅ This will be type-safe and validated.
     console.log(values);
     // create user
-    //const newUser = await createUserAccount(values);
+    const newUser = await creatUserAccount(values);
+    if (!newUser) {
+      return toast({ title: "Sign up failed please try again" });
+    }
+    //const session = await signInAccount()
   }
   return (
     <Form {...form}>
