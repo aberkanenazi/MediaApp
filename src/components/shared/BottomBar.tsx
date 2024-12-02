@@ -8,6 +8,7 @@ const BottomBar = () => {
         const isActive = pathname === link.route;
         return (
           <Link
+            key={link.label}
             to={link.route}
             className={`${
               isActive && "bg-primary-500 rounded-[10px]"
