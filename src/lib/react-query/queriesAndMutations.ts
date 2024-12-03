@@ -168,33 +168,18 @@ export const useDeletePost = () => {
   });
 };
 
-/* export const useGetPosts = () => {
+export const useGetPosts = () => {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
     queryFn: getInfinitePosts,
     getNextPageParam: (lastPage) => {
-      if (!lastPage || !lastPage.documents || lastPage.documents.length === 0) {
-        return null; // Pas de page suivante
-      }
-      const lastId = lastPage.documents[lastPage?.documents.length - 1];
-      return lastId;
-    },
-  });
-}; */
-type LastPage = {
-  documents: Document[];
-};
-
-export const useGetPosts = () => {
-  return useInfiniteQuery<LastPage>({
-    queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-    queryFn: getInfinitePosts,
-    getNextPageParam: (lastPage) => {
-      if (!lastPage || !lastPage.documents || lastPage.documents.length === 0) {
+      if (lastPage && lastPage.documents.length === 0) {
         return null;
       }
-      const lastId = lastPage.documents[lastPage.documents.length - 1]?.id;
-      return lastId || null;
+
+      // Use the $id of the last document as the cursor.
+      const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
+      return lastId;
     },
   });
 };
