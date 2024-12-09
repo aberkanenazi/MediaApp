@@ -303,7 +303,7 @@ export async function deletePost(postId: string, imageId: string) {
 }
 
 export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
-  const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(5)];
+  const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(6)];
 
   if (pageParam) {
     queries.push(Query.cursorAfter(pageParam.toString()));
@@ -333,6 +333,20 @@ export async function searchPosts(searchTerm: string) {
 
     if (!posts) throw Error;
     return posts;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getUsers() {
+  try {
+    const users = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      [Query.limit(10)]
+    );
+    if (!users) throw Error;
+    return users;
   } catch (error) {
     console.error(error);
   }
