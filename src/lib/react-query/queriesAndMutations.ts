@@ -11,6 +11,7 @@ import {
   deleteSavedPost,
   getCurrentUser,
   getInfinitePosts,
+  getInfiniteSavedPost,
   getPostById,
   getRecentPosts,
   getUsers,
@@ -107,6 +108,9 @@ export const useSavedPost = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_INFINITE_SAVED_POSTS],
+      });
     },
   });
 };
@@ -130,12 +134,11 @@ export const useDeleteSavedPost = () => {
   });
 };
 
-export const useGetCurrentUser = () => {
-  return useQuery({
+export const useGetCurrentUser = () =>
+  useQuery({
     queryKey: [QUERY_KEYS.GET_CURRENT_USER],
     queryFn: () => getCurrentUser(),
   });
-};
 
 export const useGetPostById = (postId: string) => {
   return useQuery({
@@ -178,10 +181,10 @@ export const useGetPosts = () => {
         return null;
       }
 
-      // Use the $id of the last document as the cursor.
-      const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
+      const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
       return lastId;
     },
+    initialPageParam: 0,
   });
 };
 
@@ -197,5 +200,29 @@ export const useGetUsers = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_USERS],
     queryFn: getUsers,
+  });
+};
+
+export const useGetAllUsers = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_ALL_USERS],
+    queryFn: getUsers,
+  });
+};
+
+export const useGetInfiniteSavedPosts = (userId: string) => {
+  return useInfiniteQuery({
+    queryKey: [QUERY_KEYS.GET_INFINITE_SAVED_POSTS, userId],
+    queryFn: ({ pageParam }) => getInfiniteSavedPost({ pageParam, userId }),
+    getNextPageParam: (lastPage) => {
+      if (!lastPage || lastPage.documents.length === 0) {
+        return null;
+      }
+
+      // Retournez l'ID du dernier document comme curseur
+      const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
+      return lastId;
+    },
+    initialPageParam: 0,
   });
 };

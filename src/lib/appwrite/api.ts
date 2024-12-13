@@ -303,7 +303,7 @@ export async function deletePost(postId: string, imageId: string) {
 }
 
 export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
-  const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(6)];
+  const queries = [Query.orderDesc("$updatedAt"), Query.limit(6)];
 
   if (pageParam) {
     queries.push(Query.cursorAfter(pageParam.toString()));
@@ -347,6 +347,43 @@ export async function getUsers() {
     );
     if (!users) throw Error;
     return users;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getAllUser() {
+  try {
+    const users = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId
+    );
+    if (!users) throw Error;
+    return users;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getInfiniteSavedPost({
+  pageParam,
+  userId,
+}: {
+  pageParam: number | null;
+  userId: string;
+}) {
+  const queries = [Query.limit(6), Query.equal("user", userId)];
+
+  if (pageParam) {
+    queries.push(Query.cursorAfter(pageParam.toString()));
+  }
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      queries
+    );
+    return posts;
   } catch (error) {
     console.error(error);
   }
