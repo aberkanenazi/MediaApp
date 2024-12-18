@@ -16,9 +16,7 @@ const UserCard = ({ user }: UserCardProps) => {
           className="rounded-full w-12 h-12"
         />
       </div>
-      <p className="text-sm">
-        {user.username} {user.name}
-      </p>
+
       <p className="base-medium text-light-1 text-center line-clamp-1">
         {user.name}
       </p>

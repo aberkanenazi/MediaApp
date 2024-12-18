@@ -14,6 +14,8 @@ import {
   getInfiniteSavedPost,
   getPostById,
   getRecentPosts,
+  getUserById,
+  getUserPosts,
   getUsers,
   likePost,
   savePost,
@@ -147,6 +149,14 @@ export const useGetPostById = (postId: string) => {
     enabled: !!postId,
   });
 };
+
+export const useGetUserById = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
+    queryFn: () => getUserById(userId),
+    enabled: !!userId,
+  });
+};
 export const useUpdatePost = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -224,5 +234,13 @@ export const useGetInfiniteSavedPosts = (userId: string) => {
       return lastId;
     },
     initialPageParam: 0,
+  });
+};
+
+export const useGetUserPosts = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_POSTS, userId],
+    queryFn: () => getUserPosts({ userId }),
+    enabled: !!userId,
   });
 };

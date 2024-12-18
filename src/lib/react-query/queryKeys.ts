@@ -19,4 +19,5 @@ export enum QUERY_KEYS {
   SEARCH_POSTS = "getSearchPosts",
   GET_INFINITE_SAVED_POSTS = "getInfiniteSavedPost",
   GET_ALL_USERS = "GET_ALL_USERS",
+  GET_INFINITE_LIKED_POST = "GET_INFINITE_LIKED_POST",
 }

@@ -352,6 +352,19 @@ export async function getUsers() {
   }
 }
 
+export async function getUserById(userId: string) {
+  try {
+    const user = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      userId
+    );
+    return user;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export async function getAllUser() {
   try {
     const users = await databases.listDocuments(
@@ -382,6 +395,20 @@ export async function getInfiniteSavedPost({
       appwriteConfig.databaseId,
       appwriteConfig.savesCollectionId,
       queries
+    );
+    return posts;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getUserPosts({ userId }: { userId: string }) {
+  if (!userId) throw Error;
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      [Query.equal("creator", userId)]
     );
     return posts;
   } catch (error) {
