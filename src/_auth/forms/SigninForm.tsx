@@ -57,7 +57,9 @@ const SigninForm = () => {
     <Form {...form}>
       <div className=" sm:w-420 flex-center flex-col">
         <img src="/assets/images/logo.svg" alt="logo" />
-        <h2 className="h3-bold  md:h2-bold pt-5 sm:pt-12">Log in to SYM</h2>
+        <h2 className="h3-bold  md:h2-bold pt-5 sm:pt-12">
+          Log in to Media App
+        </h2>
         <p className="text-light-3 small-medium md:base-regular">
           Welcome back! Log in to your account to view today's
         </p>
