@@ -2,6 +2,7 @@ import GridPostList from "@/components/shared/GridPostList";
 import Loader from "@/components/shared/Loader";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetInfiniteSavedPosts } from "@/lib/react-query/queriesAndMutations";
+import { Models } from "appwrite";
 
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
@@ -31,7 +32,11 @@ const Saved = () => {
       </div>
     );
   }
-  const posts = savedPosts.pages[0].documents.map((save) => save.post);
+  console.log("sss", savedPosts);
+
+  const posts = savedPosts.pages.flatMap((page) =>
+    page.documents?.map((save: Models.Document) => save.post)
+  );
   return (
     <div className="saved-container">
       <h2 className="h3-bold md:h2-bold w-full">

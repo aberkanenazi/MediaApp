@@ -26,6 +26,7 @@ import {
 } from "../appwrite/api";
 import { INewPost, INewUser, IUpdatePost } from "@/types";
 import { QUERY_KEYS } from "./queryKeys";
+import { Models } from "appwrite";
 
 export const useCreateUserAccount = () => {
   return useMutation({
@@ -225,12 +226,11 @@ export const useGetInfiniteSavedPosts = (userId: string) => {
     queryKey: [QUERY_KEYS.GET_INFINITE_SAVED_POSTS, userId],
     queryFn: ({ pageParam }) => getInfiniteSavedPost({ pageParam, userId }),
     getNextPageParam: (lastPage) => {
-      if (!lastPage || lastPage.documents.length === 0) {
+      if (lastPage && lastPage.documents.length === 0) {
         return null;
       }
 
-      // Retournez l'ID du dernier document comme curseur
-      const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
+      const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
       return lastId;
     },
     initialPageParam: 0,

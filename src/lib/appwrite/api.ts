@@ -382,11 +382,15 @@ export async function getInfiniteSavedPost({
   pageParam,
   userId,
 }: {
-  pageParam: number | null;
+  pageParam: number;
   userId: string;
 }) {
-  const queries = [Query.limit(6), Query.equal("user", userId)];
-
+  const queries = [
+    Query.orderDesc("$updatedAt"),
+    Query.limit(6),
+    Query.equal("user", userId),
+  ];
+  console.log("pageParam", pageParam);
   if (pageParam) {
     queries.push(Query.cursorAfter(pageParam.toString()));
   }
@@ -396,6 +400,8 @@ export async function getInfiniteSavedPost({
       appwriteConfig.savesCollectionId,
       queries
     );
+    if (!posts) throw Error;
+    console.log("post ", posts);
     return posts;
   } catch (error) {
     console.error(error);
