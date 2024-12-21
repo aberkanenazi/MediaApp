@@ -223,16 +223,17 @@ export const useGetAllUsers = () => {
 export const useGetInfiniteSavedPosts = (userId: string) => {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_SAVED_POSTS, userId],
-    queryFn: ({ pageParam }) => getInfiniteSavedPost({ pageParam, userId }),
+    queryFn: ({ pageParam }: { pageParam?: string | null }) =>
+      getInfiniteSavedPost({ pageParam, userId }),
     getNextPageParam: (lastPage) => {
-      if (lastPage && lastPage.documents.length === 0) {
+      if (!lastPage || lastPage.documents.length === 0) {
         return null;
       }
 
-      const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
-      return lastId;
+      const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
+      return lastId || null;
     },
-    initialPageParam: 0,
+    initialPageParam: null,
   });
 };
 

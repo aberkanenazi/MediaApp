@@ -39,17 +39,18 @@ const Saved = () => {
   );
   return (
     <div className="saved-container">
-      <h2 className="h3-bold md:h2-bold w-full">
+      <div className="flex-start gap-3 justify-start w-full max-w-5xl">
         <img src="/assets/icons/save.svg" width={24} height={24} alt="saved" />
-        Saved Posts
-      </h2>
+        <h2 className="h3-bold md:h2-bold w-full ">Saved Posts</h2>
+      </div>
+
       <div className="flex flex-wrap gap-9 w-full max-w-5xl">
         {isPending ? (
           <div className="flex-center w-full h-full">
             <Loader />
           </div>
         ) : (
-          <GridPostList posts={posts} />
+          <GridPostList posts={posts} showStats={false} />
         )}
       </div>
 

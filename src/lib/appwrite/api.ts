@@ -386,7 +386,7 @@ export async function getInfiniteSavedPost({
   pageParam,
   userId,
 }: {
-  pageParam: number;
+  pageParam?: string | null;
   userId: string;
 }) {
   const queries = [
@@ -394,21 +394,26 @@ export async function getInfiniteSavedPost({
     Query.limit(6),
     Query.equal("user", userId),
   ];
-  console.log("pageParam", pageParam);
+
   if (pageParam) {
-    queries.push(Query.cursorAfter(pageParam.toString()));
+    queries.push(Query.cursorAfter(pageParam)); // pageParam est un string ou null
   }
+
   try {
     const posts = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.savesCollectionId,
       queries
     );
-    if (!posts) throw Error;
-    console.log("post ", posts);
+
+    if (!posts) {
+      throw new Error("No posts found");
+    }
+
     return posts;
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching saved posts:", error);
+    throw error; // Important pour permettre à React Query de gérer l'état d'erreur
   }
 }
 
