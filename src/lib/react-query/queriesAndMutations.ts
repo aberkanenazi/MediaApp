@@ -26,7 +26,6 @@ import {
 } from "../appwrite/api";
 import { INewPost, INewUser, IUpdatePost } from "@/types";
 import { QUERY_KEYS } from "./queryKeys";
-import { Models } from "appwrite";
 
 export const useCreateUserAccount = () => {
   return useMutation({
@@ -195,7 +194,7 @@ export const useGetPosts = () => {
       const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
       return lastId;
     },
-    initialPageParam: 0,
+    initialPageParam: null,
   });
 };
 
