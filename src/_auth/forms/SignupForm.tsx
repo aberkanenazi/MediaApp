@@ -77,7 +77,7 @@ const SignupForm = () => {
           Sign up for an account
         </h2>
         <p className="text-light-3 small-medium md:base-regular">
-          To use SYM enter your account details
+          To use MediaApp enter your account details
         </p>
 
         <form

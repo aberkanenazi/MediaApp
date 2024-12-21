@@ -2,7 +2,8 @@ import GridPostList from "@/components/shared/GridPostList";
 import Loader from "@/components/shared/Loader";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetInfiniteSavedPosts } from "@/lib/react-query/queriesAndMutations";
-import React, { useEffect } from "react";
+
+import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
 const Saved = () => {

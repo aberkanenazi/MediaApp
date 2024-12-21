@@ -1,5 +1,5 @@
 import { Models } from "appwrite";
-import React from "react";
+
 import { Button } from "../ui/button";
 
 type UserCardProps = {
@@ -16,7 +16,6 @@ const UserCard = ({ user }: UserCardProps) => {
           className="rounded-full w-12 h-12"
         />
       </div>
-
       <p className="base-medium text-light-1 text-center line-clamp-1">
         {user.name}
       </p>
