@@ -119,18 +119,14 @@ const UserForm = () => {
           )}
         />
         <div className="flex gap-4 items-center justify-end">
-          <Button type="button" className="shad-button_dark_4">
-            Cancel
-          </Button>
           <Button
             type="submit"
             className="shad-button_primary whitespace-nowrap"
-            disabled={isLoadingUpdate}
+            disabled={true}
           >
-            {isLoadingUpdate && "Loading ..."} Update Post
+            {isLoadingUpdate && "Loading ..."} Update Info
           </Button>
         </div>
-        <Button type="submit">Submit</Button>
       </form>
     </Form>
   );
