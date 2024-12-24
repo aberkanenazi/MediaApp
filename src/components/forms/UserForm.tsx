@@ -16,6 +16,7 @@ import { useUserContext } from "@/context/AuthContext";
 import { UserValidationSchema } from "@/lib/validation";
 import { Textarea } from "../ui/textarea";
 import { useUpdatePost } from "@/lib/react-query/queriesAndMutations";
+import ProfileImgUploader from "../shared/ProfileImgUploader";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -48,6 +49,22 @@ const UserForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-9 w-full max-w-5xl"
       >
+        <FormField
+          control={form.control}
+          name="file"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <ProfileImgUploader
+                  mediaUrl={user?.imageUrl}
+                  fieldChange={field.onChange}
+                />
+              </FormControl>
+              <FormMessage className="shad-form_message" />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="names"

@@ -13,7 +13,7 @@ const LeftSideBar = () => {
   const { user } = useUserContext();
   useEffect(() => {
     if (isSuccess) {
-      navigate(0);
+      navigate("/sign-in");
     }
   }, [isSuccess]);
   console.log(user.imageUrl);
