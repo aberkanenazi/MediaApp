@@ -41,7 +41,8 @@ const SigninForm = () => {
     });
 
     if (!session) {
-      return toast({ title: "Sign in failed please try again" });
+      toast({ title: "Sign in failed please try again" });
+      return;
     }
 
     const isLoggedIn = await checkAuthUser();
@@ -50,7 +51,8 @@ const SigninForm = () => {
       form.reset();
       navigate("/");
     } else {
-      return toast({ title: "Sign in failed please try again" });
+      toast({ title: "Sign in failed please try again" });
+      return;
     }
   }
   return (
