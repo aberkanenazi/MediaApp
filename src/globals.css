@@ -277,4 +277,16 @@
   .shad-button_ghost {
     @apply flex gap-4 items-center justify-start hover:bg-transparent hover:text-white !important;
   }
+
+  .link-text {
+    @apply font-inter font-semibold text-[18px] leading-[25.2px] text-[#0095F6];
+  }
+  .reset-this-root {
+    all: initial;
+  }
+  .fixed-size {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
 }

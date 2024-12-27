@@ -15,32 +15,42 @@ import { useUserContext } from "@/context/AuthContext";
 
 import { UserValidationSchema } from "@/lib/validation";
 import { Textarea } from "../ui/textarea";
-import { useUpdatePost } from "@/lib/react-query/queriesAndMutations";
+import { useUpdateUser } from "@/lib/react-query/queriesAndMutations";
+import ProfileImgUploader from "../shared/ProfileImgUploader";
+import { useToast } from "@/components/ui/use-toast";
+import { useNavigate, useParams } from "react-router-dom";
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-});
 const UserForm = () => {
+  const { id } = useParams();
+  const { toast } = useToast();
   const { user } = useUserContext();
-  const { isPending: isLoadingUpdate } = useUpdatePost();
+  const navigate = useNavigate();
+  const { mutateAsync: updateUser, isPending: isLoadingUpdate } =
+    useUpdateUser();
   const form = useForm<z.infer<typeof UserValidationSchema>>({
     resolver: zodResolver(UserValidationSchema),
     defaultValues: {
       file: [],
-      names: user?.name || "",
+      name: user?.name || "",
       username: user?.username || "",
       email: user?.email || "",
       bio: user?.bio || "",
     },
   });
-  console.log(form.getValues());
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+
+  async function onSubmit(values: z.infer<typeof UserValidationSchema>) {
+    const updatedUser = await updateUser({
+      ...values,
+      userId: user.id,
+      imageUrl: user?.imageUrl,
+      imageId: user?.imageId,
+    });
+    if (!updatedUser) {
+      toast({
+        title: "Please try again",
+      });
+    }
+    navigate("/profile/" + id);
   }
   return (
     <Form {...form}>
@@ -50,7 +60,23 @@ const UserForm = () => {
       >
         <FormField
           control={form.control}
-          name="names"
+          name="file"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl className="">
+                <ProfileImgUploader
+                  mediaUrl={user?.imageUrl}
+                  fieldChange={field.onChange}
+                />
+              </FormControl>
+              <FormMessage className="shad-form_message" />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="shad-form_label">Names</FormLabel>
@@ -122,7 +148,6 @@ const UserForm = () => {
           <Button
             type="submit"
             className="shad-button_primary whitespace-nowrap"
-            disabled={true}
           >
             {isLoadingUpdate && "Loading ..."} Update Info
           </Button>

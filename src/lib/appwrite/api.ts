@@ -1,4 +1,4 @@
-import { INewPost, INewUser, IUpdatePost } from "@/types";
+import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import { ID, Query } from "appwrite";
 
@@ -78,7 +78,6 @@ export async function getCurrentUser() {
 export async function signOutAccount() {
   try {
     const session = await account.deleteSession("current");
-    console.log(session);
     return session;
   } catch (error) {
     console.error(error);
@@ -319,7 +318,6 @@ export async function getInfinitePosts({
       appwriteConfig.postCollectionId,
       queries
     );
-    console.log(posts);
     if (!posts) throw Error;
     return posts;
   } catch (error) {
@@ -426,6 +424,54 @@ export async function getUserPosts({ userId }: { userId: string }) {
       [Query.equal("creator", userId)]
     );
     return posts;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function updateUser(user: IUpdateUser) {
+  const hasFileToUpdate = user.file.length > 0;
+  try {
+    let image = {
+      imageUrl: user.imageUrl,
+      imageId: user.imageId,
+    };
+
+    if (hasFileToUpdate) {
+      const uploadedFile = await uploadFile(user.file[0]);
+
+      if (!uploadedFile) throw Error;
+
+      const fileUrl = getFilePreview(uploadedFile.$id);
+      if (!fileUrl) {
+        deleteFile(uploadedFile.$id);
+        throw Error;
+      }
+
+      image = {
+        ...image,
+        imageUrl: fileUrl,
+        imageId: uploadedFile.$id,
+      };
+    }
+    const updatedUser = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      user.userId,
+      {
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        bio: user.bio,
+        imageUrl: image.imageUrl,
+        imageId: image.imageId,
+      }
+    );
+    if (!updatedUser) {
+      deleteFile(user.imageId);
+      throw Error;
+    }
+    return updatedUser;
   } catch (error) {
     console.error(error);
   }

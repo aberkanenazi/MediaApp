@@ -32,7 +32,6 @@ const Saved = () => {
       </div>
     );
   }
-  console.log("sss", savedPosts);
 
   const posts = savedPosts.pages.flatMap((page) =>
     page.documents?.map((save: Models.Document) => save.post)

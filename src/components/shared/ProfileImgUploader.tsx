@@ -27,11 +27,8 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
   });
 
   return (
-    <div
-      {...getRootProps()}
-      className="flex flex-center flex-col bg-dark-3 rounded-xl cursor-pointer"
-    >
-      <input {...getInputProps()} className=" cursor-pointer" />
+    <div {...getRootProps()} className=" cursor-pointer">
+      <input {...getInputProps()} className="cursor-pointer" />
       {fileUrl ? (
         <>
           <div className="flex w-full gap-4 p-5 lg:p-10 items-center">
@@ -39,7 +36,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
               <img
                 src={fileUrl}
                 alt="image"
-                className="rounded-full"
+                className="rounded-full fixed-size"
                 width={100}
                 height={100}
               />
@@ -48,8 +45,9 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
           </div>
         </>
       ) : (
-        <div className="flex items-start">
+        <div className="flex w-full gap-4 p-5 lg:p-10 items-center">
           <img
+            className="border border-dark-4/80 rounded-full fixed-size"
             src="/assets/icons/file-upload.svg"
             width={100}
             height={100}
