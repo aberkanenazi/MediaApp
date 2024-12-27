@@ -29,7 +29,7 @@ export const PostValidationSchema = z.object({
 
 export const UserValidationSchema = z.object({
   file: z.custom<File[]>(),
-  names: z.string().min(2).max(100),
+  name: z.string().min(2).max(100),
   username: z.string().min(2).max(100),
   email: z.string().email(),
   bio: z.string().min(2).max(500),

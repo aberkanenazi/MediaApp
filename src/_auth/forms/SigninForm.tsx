@@ -23,7 +23,8 @@ const SigninForm = () => {
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
   const navigate = useNavigate();
 
-  const { mutateAsync: signInAccount } = useSignInAccount();
+  const { mutateAsync: signInAccount, isPending: isSigningIn } =
+    useSignInAccount();
 
   const form = useForm<z.infer<typeof SigninValidationSchema>>({
     resolver: zodResolver(SigninValidationSchema),
@@ -33,7 +34,6 @@ const SigninForm = () => {
     },
   });
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SigninValidationSchema>) {
     const session = await signInAccount({
       email: values.email,
@@ -97,7 +97,7 @@ const SigninForm = () => {
             )}
           />
           <Button type="submit" className="shad-button_primary">
-            {isUserLoading ? (
+            {isSigningIn || isUserLoading ? (
               <div className="flex-center gap-2">
                 <Loader />
                 <span>Loading ...</span>
